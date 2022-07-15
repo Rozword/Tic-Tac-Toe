@@ -1,0 +1,76 @@
+body{
+    display: grid;
+    height: 90vh;
+    background-image: url(images/paper-bg.webp);
+    grid-template-columns: repeat(2, 1fr);  
+    grid-template-rows: 1fr 1fr 15fr;  
+    grid-template-areas: 
+    'start reset'
+    'playerOne playerTwo'
+    'container container';
+    gap: 25px;
+    
+}
+
+#container{
+    grid-area: container;
+    display: grid;
+    height: 500px;
+    width: 500px;
+    background-image: url(images/tic-tac-toe-bg.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    justify-self: center;
+    align-self: center;
+    
+   
+}
+
+#gameboard{
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: end;
+    justify-items: center;
+    justify-content: center;
+    
+}
+
+.cells{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+   
+    
+}
+button{
+    width: 25%;
+    
+}
+
+#start{
+    grid-area: start;
+    justify-self: end;
+   
+}
+#reset{
+    grid-area: reset;
+    justify-self: start;
+}
+#playerOneDiv{
+    grid-area: playerOne;   
+    justify-self: end; 
+}
+#playerTwoDiv{
+    grid-area: playerTwo;
+    justify-self: start;
+
+}
+
+
