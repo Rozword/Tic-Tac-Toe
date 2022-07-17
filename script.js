@@ -9,14 +9,9 @@ let gameboard = (() => {
     let spot8 = document.querySelector('#spot8')
     let spot9 = document.querySelector('#spot9')
     let gameboardCells = [spot1, spot2, spot3, spot4, spot5, spot6, spot7, spot8, spot9]
-    const print = function(){console.log(this)}
-    print()
     return{gameboardCells};
 
 })();
-
-console.log(gameboard.gameboardCells[4])
-
 
 let player = (name, marker) => {
     let score = 0
@@ -24,17 +19,21 @@ let player = (name, marker) => {
 
 }
 
-let playerOne = player(`playerOne`, 'X')
-let playerTwo = player(`playerTwo`, 'O')
+let playerOne = player(`player One`, 'X')
+let playerTwo = player(`player Two`, 'O')
 
 let getPlayersName = (() =>{
     let getPlayerOneName = () => {
      playerOne.name = document.querySelector('#playerOne').value
      document.querySelector('#playerOne').value = ''
+     document.querySelector('#playerOneLabel').textContent = `${playerOne.name}`
+     gameController.scoreBoard.textContent = `${playerOne.name}:${playerOne.score} / ${playerTwo.name}:${playerTwo.score}`
     }    
     let getPlayerTwoName = () => {
     playerTwo.name = document.querySelector('#playerTwo').value    
     document.querySelector('#playerTwo').value = ''
+    document.querySelector('#playerTwoLabel').textContent = `${playerTwo.name}`
+    gameController.scoreBoard.textContent = `${playerOne.name}:${playerOne.score} / ${playerTwo.name}:${playerTwo.score}`
     }
     return{getPlayerOneName, getPlayerTwoName}
 })()
@@ -43,37 +42,42 @@ let getPlayersName = (() =>{
 let gameController = (() => {
     let turnMarker
     let turnCount = 0
+    let gameStart = false
+    let scoreBoard = document.querySelector('#score')
+    
     function resetBoard() {
         gameboard.gameboardCells.forEach(function(cell){
         cell.textContent = ''
         })       
     }
-    return{turnMarker, turnCount, resetBoard}
+    return{turnMarker, turnCount, resetBoard, gameStart, scoreBoard}
 })();
 
+function letGameStart (){
+    gameController.gameStart = true
+}
 
 
-console.log(playerTwo.score)
-
-
-function boardDraw(){
+let boardDraw =(()=>{    
+    gameController.scoreBoard.textContent = `${playerOne.name}:${playerOne.score} / ${playerTwo.name}:${playerTwo.score}`
     gameboard.gameboardCells.forEach(function(cell){
-        cell.addEventListener('click', function(){            
-            if(cell.textContent === ''){
-                turns()           
-                cell.textContent = gameController.turnMarker
-            }
-            let checkGameOver = (() => {
-                setTimeout(gameOver, 1)
-            })();
+        cell.addEventListener('click', function(){ 
+            if (gameController.gameStart === true){           
+                if(cell.textContent === ''){
+                    turns()           
+                    cell.textContent = gameController.turnMarker
+                 }
+                    let checkGameOver = (() => {
+                    setTimeout(gameOver, 1)
+                })();
+            }            
         })
     })     
-       
-    };   
+})();   
 
 
 
-function turns() {    
+function turns () {    
     if (gameController.turnCount % 2 === 0){
         gameController.turnMarker = playerOne.marker
         gameController.turnCount++
@@ -85,89 +89,112 @@ function turns() {
 }
 
 
+
+
+let result = (() =>{
+    function showPlayerOne() {
+            gameController.gameStart = false
+            gameController.turnCount = 0
+            document.querySelector('#winnerPopup').style.display = 'block'  
+            document.querySelector('#winnerPopup').style.backgroundColor = 'pink'                 
+            document.querySelector('#winnerPopupText').textContent = `${playerOne.name} wins!` 
+            document.querySelector('#winnerPopupText').style.margin = `0` 
+            gameController.resetBoard();    
+            playerOne.score++  
+            gameController.scoreBoard.textContent = `${playerOne.name}:${playerOne.score} / ${playerTwo.name}:${playerTwo.score}`  
+    }
+    function showPlayerTwo() {
+            gameController.gameStart = false
+            gameController.turnCount = 0
+            document.querySelector('#winnerPopup').style.display = 'block'  
+            document.querySelector('#winnerPopup').style.backgroundColor = 'lightblue'                 
+            document.querySelector('#winnerPopupText').textContent = `${playerTwo.name} wins!` 
+            document.querySelector('#winnerPopupText').style.margin = `0` 
+            gameController.resetBoard();
+            playerTwo.score++ 
+            gameController.scoreBoard.textContent = `${playerOne.name}:${playerOne.score} / ${playerTwo.name}:${playerTwo.score}`
+    }
+    function tie(){
+            gameController.gameStart = false
+            gameController.turnCount = 0
+            document.querySelector('#winnerPopup').style.display = 'block'  
+            document.querySelector('#winnerPopup').style.backgroundColor = 'white'                 
+            document.querySelector('#winnerPopupText').textContent = `It\'s a tie!` 
+            document.querySelector('#winnerPopupText').style.margin = `0` 
+            gameController.resetBoard();
+    }
+    return{showPlayerOne, showPlayerTwo, tie}
+})();
+
+
+
 function gameOver(){
     if((spot1.textContent === spot2.textContent) && (spot1.textContent === spot3.textContent)){
         if (spot1.textContent === playerOne.marker){
-            alert(`${playerOne.name} wins!`)
-            gameController.resetBoard();
+            result.showPlayerOne();            
         }
         else if((spot1.textContent === playerTwo.marker)){
-            alert('Player 2 wins!')
-            gameController.resetBoard();
+            result.showPlayerTwo();
         }
     }
     else if ((spot1.textContent === spot4.textContent) && (spot1.textContent === spot7.textContent)){
         if (spot1.textContent === playerOne.marker){
-            alert('Player 1 wins!')
-            gameController.resetBoard();
+            result.showPlayerOne();  
         }
         else if((spot1.textContent === playerTwo.marker)){
-            alert('Player 2 wins!')
-            gameController.resetBoard();
+            result.showPlayerTwo();
         }    
         }
     else if ((spot1.textContent === spot5.textContent) && (spot1.textContent === spot9.textContent)){
         if (spot1.textContent === playerOne.marker){
-            alert('Player 1 wins!')
-            gameController.resetBoard();
+            result.showPlayerOne();
         }
         else if((spot1.textContent === playerTwo.marker)){
-            alert('Player 2 wins!')
-            gameController.resetBoard();
+            result.showPlayerTwo();
         }    
     }
     else if ((spot2.textContent === spot5.textContent) && (spot2.textContent === spot8.textContent)){
         if (spot2.textContent === playerOne.marker){
-            alert('Player 1 wins!')
-            gameController.resetBoard();
+            result.showPlayerOne();
         }
         else if((spot2.textContent === playerTwo.marker)){
-            alert('Player 2 wins!')
-            gameController.resetBoard();
+            result.showPlayerTwo();
         }
     }  
     
     else if ((spot3.textContent === spot5.textContent) && (spot3.textContent === spot7.textContent)){
         if (spot3.textContent === playerOne.marker){
-            alert('Player 1 wins!')
-            gameController.resetBoard();
+            result.showPlayerOne();
         }
         else if((spot3.textContent === playerTwo.marker)){
-            alert('Player 2 wins!')
-            gameController.resetBoard();
+            result.showPlayerTwo();
         }
     } 
 
     else if ((spot3.textContent === spot6.textContent) && (spot3.textContent === spot9.textContent)){
         if (spot3.textContent === playerOne.marker){
-            alert('Player 1 wins!')
-            gameController.resetBoard();
+            result.showPlayerOne();
         }
         else if((spot3.textContent === playerTwo.marker)){
-            alert('Player 2 wins!')
-            gameController.resetBoard();
+            result.showPlayerTwo();
         }
     }
         
     else if ((spot4.textContent === spot5.textContent) && (spot4.textContent === spot6.textContent)){
         if (spot4.textContent === playerOne.marker){
-            alert('Player 1 wins!')
-            gameController.resetBoard();
+            result.showPlayerOne();
         }
         else if((spot4.textContent === playerTwo.marker)){
-            alert('Player 2 wins!')
-            gameController.resetBoard();
+            result.showPlayerTwo();
         }
     } 
 
     else if ((spot7.textContent === spot8.textContent) && (spot7.textContent === spot9.textContent)){
         if (spot7.textContent === playerOne.marker){
-            alert('Player 1 wins!')
-            gameController.resetBoard();
+            result.showPlayerOne();
         }
         else if((spot7.textContent === playerTwo.marker)){
-            alert('Player 2 wins!')
-            gameController.resetBoard();
+            result.showPlayerTwo();
         }
     }
     else if (
@@ -175,10 +202,16 @@ function gameOver(){
     (spot4.textContent !== '') && (spot5.textContent !== '') && (spot6.textContent !== '') && 
     (spot7.textContent !== '') && (spot8.textContent !== '') && (spot9.textContent !== ''))
     {
-        alert('Tie!')
-        gameController.resetBoard();
+        result.tie();
     }
 }
+
+let closePopup = (() => {   
+        document.querySelector('#winnerPopup').style.display = 'none'    
+});
+
+
+
 
 
 

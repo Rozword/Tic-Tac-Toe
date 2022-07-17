@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,21 +10,19 @@
     <script src="script.js" defer></script>
 </head>
 <body>
-    <button id="start" onclick="boardDraw()">Start</button>
+    <button id="start" onclick="letGameStart()">Start</button>
     <button id="reset" onclick="gameController.resetBoard()">Reset</button>
     <div id="playerOneDiv">        
-        <label for="playerOne">Player one's name</label><br>
-        <input type="text" name="playerOne" id="playerOne" placeholder="Enter Name"><br>
+        <label for="playerOne" id="playerOneLabel">Player one's name ('X')</label><br><br>
+        <input type="text" name="playerOne" id="playerOne" placeholder="Enter Name"><br><br>
         <input type="button" onclick="getPlayersName.getPlayerOneName()" value="Enter Name">        
     </div>
     <div id="playerTwoDiv">
-        <label for="playerOne">Player two's name</label><br>
-        <input type="text" name="playerTwo" id="playerTwo" placeholder="Enter Name"><br>
+        <label for="playerOne" id="playerTwoLabel">Player two's name ('O')</label><br><br>
+        <input type="text" name="playerTwo" id="playerTwo" placeholder="Enter Name"><br><br>
         <input type="button" onclick="getPlayersName.getPlayerTwoName()" value="Enter Name">
     </div>
     <div id="container">
-    
-
     <div id="gameboard">
         <div class="cells" id="spot1"><p></p></div>
         <div class="cells" id="spot2"><p></p></div>
@@ -34,12 +33,15 @@
         <div class="cells" id="spot7"><p></p></div>
         <div class="cells" id="spot8"><p></p></div>
         <div class="cells" id="spot9"><p></p></div>  
-
-
-
-
     </div>
-</div>
+    </div>
+
+    <div id="winnerPopup">
+        <p id="winnerPopupText">A</p>
+        <input type="button" id="winnerPopupButton" value="Close" onclick="closePopup()"> 
+    </div>
+
+    <span id="score"></span>
     
 </body>
 </html>
