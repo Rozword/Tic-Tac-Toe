@@ -47,7 +47,7 @@ let gameController = (() => {
     
     function resetBoard() {
         gameboard.gameboardCells.forEach(function(cell){
-        cell.textContent = ''
+        cell.textContent = ''        
         })       
     }
     return{turnMarker, turnCount, resetBoard, gameStart, scoreBoard}
@@ -55,6 +55,16 @@ let gameController = (() => {
 
 function letGameStart (){
     gameController.gameStart = true
+}
+function resetGame(){
+        gameController.resetBoard() 
+        playerOne.name = 'Player One'
+        playerOne.score = 0
+        playerTwo.name = 'Player Two'
+        playerTwo.score = 0
+        gameController.scoreBoard.textContent = `${playerOne.name}:${playerOne.score} / ${playerTwo.name}:${playerTwo.score}`
+        document.querySelector('#playerOneLabel').textContent = `${playerOne.name}`
+        document.querySelector('#playerTwoLabel').textContent = `${playerTwo.name}`
 }
 
 
