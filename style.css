@@ -9,9 +9,10 @@ body{
     height: 90vh;
     background-image: url(images/paper-bg.webp);
     grid-template-columns: repeat(2, 1fr);  
-    grid-template-rows: 1fr 1fr 15fr 1fr;  
+    grid-template-rows: 1fr 1fr 1fr 15fr 1fr;  
     grid-template-areas: 
     'start reset'
+    'pc pc'
     'playerOne playerTwo'
     'container container'
     'score score';
@@ -170,4 +171,9 @@ button:hover{
     border: 5px dashed black; 
     justify-self: center;
     box-shadow: 5px 5px 5px gray;
+}
+
+#Computer{
+    grid-area: pc;
+    justify-self: center;
 }

@@ -19,8 +19,11 @@ let player = (name, marker) => {
 
 }
 
-let playerOne = player(`player One`, 'X')
-let playerTwo = player(`player Two`, 'O')
+let playerOne = player(`Player One`, 'X')
+let playerTwo = player(`Player Two`, 'O')
+
+
+
 
 let getPlayersName = (() =>{
     let getPlayerOneName = () => {
@@ -43,6 +46,7 @@ let gameController = (() => {
     let turnMarker
     let turnCount = 0
     let gameStart = false
+    let pc = false
     let scoreBoard = document.querySelector('#score')
     
     function resetBoard() {
@@ -50,40 +54,79 @@ let gameController = (() => {
         cell.textContent = ''        
         })       
     }
-    return{turnMarker, turnCount, resetBoard, gameStart, scoreBoard}
+    return{turnMarker, turnCount, resetBoard, gameStart, scoreBoard, pc}
 })();
+
+let pcOn = (()=>{
+    gameController.pc = true
+    playerTwo.name = `Computer`
+    document.querySelector('#playerTwoLabel').textContent = `${playerTwo.name} ('O')`
+    gameController.scoreBoard.textContent = `${playerOne.name}:${playerOne.score} / ${playerTwo.name}:${playerTwo.score}`
+})
+
+
 
 function letGameStart (){
     gameController.gameStart = true
 }
 function resetGame(){
         gameController.resetBoard() 
-        playerOne.name = 'Player One'
+        playerOne.name = `Player One`
         playerOne.score = 0
-        playerTwo.name = 'Player Two'
+        playerTwo.name = `Player Two`
         playerTwo.score = 0
+        pc = false
         gameController.scoreBoard.textContent = `${playerOne.name}:${playerOne.score} / ${playerTwo.name}:${playerTwo.score}`
-        document.querySelector('#playerOneLabel').textContent = `${playerOne.name}`
-        document.querySelector('#playerTwoLabel').textContent = `${playerTwo.name}`
+        document.querySelector('#playerOneLabel').textContent = `${playerOne.name} ('X')`
+        document.querySelector('#playerTwoLabel').textContent = `${playerTwo.name} ('O')`
 }
-
 
 let boardDraw =(()=>{    
     gameController.scoreBoard.textContent = `${playerOne.name}:${playerOne.score} / ${playerTwo.name}:${playerTwo.score}`
     gameboard.gameboardCells.forEach(function(cell){
         cell.addEventListener('click', function(){ 
-            if (gameController.gameStart === true){           
+            if (gameController.gameStart === true){ 
+                if(gameController.pc === false){          
                 if(cell.textContent === ''){
                     turns()           
                     cell.textContent = gameController.turnMarker
                  }
                     let checkGameOver = (() => {
-                    setTimeout(gameOver, 1)
+                    setTimeout(gameOver, 500)
                 })();
-            }            
-        })
-    })     
-})();   
+                }
+                
+                else if (gameController.pc === true){
+                    if(cell.textContent === ''){                                 
+                        cell.textContent = playerOne.marker
+                        for(let i = 0;gameboard.gameboardCells.length; i++ ){
+                            if(gameboard.gameboardCells[i].textContent === '' ){
+                                break
+                            }
+                            else{
+                                setTimeout(gameOver, 500)
+                                continue
+                                
+                            }
+                        }  
+                        for(;;){
+                            let pcCell = gameboard.gameboardCells[Math.floor(Math.random()*gameboard.gameboardCells.length)]
+                            if (pcCell.textContent === ''){
+                                pcCell.textContent = playerTwo.marker
+                            break;
+                            }                            
+                        }
+                    
+                     }
+                         let checkGameOver = (() => {
+                        setTimeout(gameOver, 500)
+                    })();
+                    }
+            }
+            })
+            })           
+        })();
+  
 
 
 
@@ -98,6 +141,17 @@ function turns () {
     }    
 }
 
+function pcTurns() {
+    if (gameController.turnCount % 2 === 0){
+        gameController.turnMarker = playerOne.marker
+        gameController.turnCount++
+    }
+    else if (gameController.turnCount % 2 !== 0){
+        gameController.turnMarker = playerTwo.marker  
+        gameController.turnCount++      
+    } 
+    
+};
 
 
 
@@ -219,6 +273,8 @@ function gameOver(){
 let closePopup = (() => {   
         document.querySelector('#winnerPopup').style.display = 'none'    
 });
+
+
 
 
 
